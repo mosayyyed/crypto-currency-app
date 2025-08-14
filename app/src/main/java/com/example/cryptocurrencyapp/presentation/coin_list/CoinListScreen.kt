@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,12 +21,14 @@ import androidx.navigation.NavController
 import com.example.cryptocurrencyapp.presentation.Screen
 import com.example.cryptocurrencyapp.presentation.coin_list.components.CoinListItem
 import com.example.cryptocurrencyapp.presentation.components.NoInternetScreen
+import com.example.cryptocurrencyapp.presentation.components.ThemeToggleButton
 import com.example.cryptocurrencyapp.presentation.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListScreen(
     navController: NavController,
+    themeManager: ThemeManager,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
@@ -37,16 +38,22 @@ fun CoinListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundLight)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        // Modern Flat Header - No Gradient
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Primary) // Pure flat color
-                .padding(top = 48.dp, bottom = 24.dp, start = 20.dp, end = 20.dp)
+        // Modern Flat Header with Theme Toggle
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            shadowElevation = 0.dp // Flat design - no elevation
         ) {
-            Column {
+            Column(
+                modifier = Modifier.padding(
+                    top = 48.dp,
+                    bottom = 24.dp,
+                    start = 20.dp,
+                    end = 20.dp
+                )
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,68 +61,52 @@ fun CoinListScreen(
                 ) {
                     Column {
                         Text(
-                            text = "CryptoTracker",
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = TextOnPrimary,
+                            text = "Crypto Currency",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 28.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Track your favorite cryptocurrencies",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextOnPrimary.copy(alpha = 0.9f)
+                            text = "Live Market Prices",
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal
                         )
                     }
 
-                    // Modern Flat Icon Container
-                    Box(
+                    ThemeToggleButton(
+                        themeManager = themeManager,
                         modifier = Modifier
-                            .size(48.dp)
-                            .background(
-                                color = TextOnPrimary.copy(alpha = 0.15f),
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "Trending",
-                            tint = TextOnPrimary,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Modern Flat Search Bar
+                // Search Bar - Flat Design
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    modifier = Modifier
-                        .fillMaxWidth(),
                     placeholder = {
                         Text(
                             "Search cryptocurrencies...",
-                            color = TextSecondary.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
                     leadingIcon = {
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = TextSecondary.copy(alpha = 0.7f)
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = SurfaceLight,
-                        unfocusedContainerColor = SurfaceLight,
-                        focusedBorderColor = BorderLight,
-                        unfocusedBorderColor = BorderLight,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                    )
                 )
             }
         }
@@ -131,7 +122,7 @@ fun CoinListScreen(
                 NoInternetScreen(
                     onRetry = { viewModel.retryConnection() }
                 )
-            } else if (state.error.isNotBlank() && !isNetworkError) {
+            } else if (state.error.isNotBlank()) {
                 // Error State - Pure Flat Design
                 Box(
                     modifier = Modifier
@@ -215,7 +206,7 @@ fun CoinListScreen(
                         )
                     }
 
-                    if (filteredCoins.isEmpty() && searchQuery.isNotBlank() && !state.isLoading) {
+                    if (filteredCoins.isEmpty() && searchQuery.isNotBlank()) {
                         item {
                             // No Results - Flat Design
                             Box(

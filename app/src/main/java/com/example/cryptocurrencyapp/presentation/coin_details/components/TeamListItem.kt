@@ -23,17 +23,12 @@ fun TeamListItem(
     teamMember: TeamMember,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .background(
-                color = CardBackgroundGray,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = BorderLight,
-                shape = RoundedCornerShape(12.dp)
-            )
+    // Pure Flat Design Card for Team Members
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        shape = RoundedCornerShape(12.dp),
+        shadowElevation = 0.dp // Flat design - no elevation
     ) {
         Row(
             modifier = Modifier
@@ -41,39 +36,40 @@ fun TeamListItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar - Pure Flat Design
+            // Avatar - Modern Flat Circle
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(40.dp)
                     .background(
-                        color = Secondary.copy(alpha = 0.15f),
-                        shape = RoundedCornerShape(12.dp)
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        shape = CircleShape
                     )
                     .border(
-                        width = 1.dp,
-                        color = Secondary.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(12.dp)
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                        shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = teamMember.name.take(2).uppercase(),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Secondary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
+            // Team Member Info
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = teamMember.name,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -82,8 +78,8 @@ fun TeamListItem(
 
                 Text(
                     text = teamMember.position,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

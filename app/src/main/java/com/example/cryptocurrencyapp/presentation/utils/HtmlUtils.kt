@@ -1,89 +1,56 @@
 package com.example.cryptocurrencyapp.presentation.utils
 
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.LocalTextStyle
+import android.text.Html
+import android.text.Spanned
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.sp
+
+/**
+ * Remove HTML tags from text and return clean string
+ */
+fun removeHtmlTags(htmlText: String?): String {
+    return if (htmlText.isNullOrEmpty()) {
+        ""
+    } else {
+        Html.fromHtml(htmlText, Html.FROM_HTML_MODE_LEGACY).toString().trim()
+    }
+}
+
+/**
+ * Convert HTML text to AnnotatedString for better formatting in Compose
+ */
+fun htmlToAnnotatedString(htmlText: String?): AnnotatedString {
+    if (htmlText.isNullOrEmpty()) return AnnotatedString("")
+
+    val spanned: Spanned = Html.fromHtml(htmlText, Html.FROM_HTML_MODE_LEGACY)
+    return buildAnnotatedString {
+        append(spanned.toString())
+
+        // You can add custom styling here based on HTML tags if needed
+        // For now, we'll keep it simple and clean
+    }
+}
 
 @Composable
 fun HtmlText(
     html: String,
+    modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onSurface
 ) {
-    val annotatedString = buildAnnotatedString {
-        val cleanText = html
-            .replace("<p>", "")
-            .replace("</p>", "\n\n")
-            .replace("<br>", "\n")
-            .replace("<br/>", "\n")
-            .replace("<br />", "\n")
-            .replace("<strong>", "")
-            .replace("</strong>", "")
-            .replace("<b>", "")
-            .replace("</b>", "")
-            .replace("<em>", "")
-            .replace("</em>", "")
-            .replace("<i>", "")
-            .replace("</i>", "")
-            .replace("<u>", "")
-            .replace("</u>", "")
-            .replace("&amp;", "&")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&quot;", "\"")
-            .replace("&#39;", "'")
-            .replace("&nbsp;", " ")
-            .trim()
+    val cleanText = removeHtmlTags(html)
 
-        append(cleanText)
-
-        // Apply color to entire text
-        addStyle(
-            style = SpanStyle(color = color),
-            start = 0,
-            end = cleanText.length
+    SelectionContainer {
+        Text(
+            text = cleanText,
+            modifier = modifier,
+            color = color,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
-
-    ClickableText(
-        text = annotatedString,
-        style = LocalTextStyle.current.copy(
-            lineHeight = 24.sp
-        ),
-        onClick = { }
-    )
-}
-
-fun String.removeHtmlTags(): String {
-    return this
-        .replace("<p>", "")
-        .replace("</p>", "\n\n")
-        .replace("<br>", "\n")
-        .replace("<br/>", "\n")
-        .replace("<br />", "\n")
-        .replace("<strong>", "")
-        .replace("</strong>", "")
-        .replace("<b>", "")
-        .replace("</b>", "")
-        .replace("<em>", "")
-        .replace("</em>", "")
-        .replace("<i>", "")
-        .replace("</i>", "")
-        .replace("<u>", "")
-        .replace("</u>", "")
-        .replace("&amp;", "&")
-        .replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("&quot;", "\"")
-        .replace("&#39;", "'")
-        .replace("&nbsp;", " ")
-        .replace(Regex("<[^>]*>"), "") // Remove any remaining HTML tags
-        .trim()
 }

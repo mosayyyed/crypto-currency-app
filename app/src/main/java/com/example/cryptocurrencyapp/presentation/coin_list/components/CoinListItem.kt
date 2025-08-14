@@ -25,20 +25,16 @@ fun CoinListItem(
     coin: Coin,
     onItemClick: (Coin) -> Unit
 ) {
-    // Pure Flat Card Design - No Shadows
-    Box(
+    // Pure Flat Card Design - No Shadows or Gradients
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                color = SurfaceLight,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = BorderLight,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable { onItemClick(coin) }
+            .clickable { onItemClick(coin) },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(0.dp), // Flat design - no elevation
+        shape = RoundedCornerShape(16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -47,137 +43,104 @@ fun CoinListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Coin Info Section
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Coin Avatar - Pure Flat Design
+                // Coin Icon - Flat Circle Design
                 Box(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(48.dp)
                         .background(
-                            color = Primary.copy(alpha = 0.1f),
-                            shape = RoundedCornerShape(16.dp)
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = CircleShape
                         )
                         .border(
-                            width = 1.dp,
-                            color = Primary.copy(alpha = 0.2f),
-                            shape = RoundedCornerShape(16.dp)
+                            width = 2.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = coin.symbol.take(3).uppercase(),
-                        style = MaterialTheme.typography.labelLarge,
+                        text = coin.symbol.take(2).uppercase(),
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Primary,
-                        fontSize = 14.sp
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
+                // Coin Details
+                Column {
                     Text(
                         text = coin.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = coin.symbol.uppercase(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextSecondary,
-                            fontWeight = FontWeight.Medium
-                        )
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        // Rank Badge - Flat Design
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = when {
-                                        coin.rank <= 10 -> Success.copy(alpha = 0.15f)
-                                        coin.rank <= 50 -> Warning.copy(alpha = 0.15f)
-                                        else -> TextSecondary.copy(alpha = 0.15f)
-                                    },
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .border(
-                                    width = 1.dp,
-                                    color = when {
-                                        coin.rank <= 10 -> Success.copy(alpha = 0.3f)
-                                        coin.rank <= 50 -> Warning.copy(alpha = 0.3f)
-                                        else -> TextSecondary.copy(alpha = 0.3f)
-                                    },
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                        ) {
-                            Text(
-                                text = "#${coin.rank}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = when {
-                                    coin.rank <= 10 -> Success
-                                    coin.rank <= 50 -> Warning
-                                    else -> TextSecondary
-                                },
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                            )
-                        }
-                    }
+                    Text(
+                        text = coin.symbol.uppercase(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
 
+            // Status and Rank Section
             Column(
                 horizontalAlignment = Alignment.End
             ) {
-                // Activity Status - Flat Design
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = if (coin.isActive) Success.copy(alpha = 0.15f) else Error.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = if (coin.isActive) Success.copy(alpha = 0.3f) else Error.copy(alpha = 0.3f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
+                // Rank Badge - Flat Design
+                Surface(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.border(
+                        1.dp,
+                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                        RoundedCornerShape(8.dp)
+                    )
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .background(
-                                    color = if (coin.isActive) Success else Error,
-                                    shape = CircleShape
-                                )
-                        )
+                    Text(
+                        text = "#${coin.rank}",
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
 
-                        Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                        Text(
-                            text = if (coin.isActive) "Active" else "Inactive",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (coin.isActive) Success else Error,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                // Status Indicator - Flat Design
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(
+                                color = if (coin.isActive) Success else Error,
+                                shape = CircleShape
+                            )
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    Text(
+                        text = if (coin.isActive) "Active" else "Inactive",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (coin.isActive) Success else Error,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }

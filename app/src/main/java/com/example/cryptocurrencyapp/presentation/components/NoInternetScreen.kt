@@ -4,90 +4,110 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.cryptocurrencyapp.presentation.ui.theme.*
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.RefreshCw
+import compose.icons.feathericons.WifiOff
 
 @Composable
 fun NoInternetScreen(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(32.dp)
+        // Pure Flat Design Card for No Internet
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(0.dp), // Flat design - no elevation
+            shape = RoundedCornerShape(20.dp)
         ) {
-            Box(
+            Column(
                 modifier = Modifier
-                    .background(
-                        color = SurfaceLight,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Error.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(16.dp)
-                    )
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "📡",
-                        fontSize = 48.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "No Internet Connection",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "Please check your internet connection and try again.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Button(
-                        onClick = onRetry,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Primary
+                // WiFi Off Icon - Modern Flat Design with Feather Icons
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .background(
+                            color = Error.copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = Error.copy(alpha = 0.3f),
+                            shape = RoundedCornerShape(16.dp)
                         ),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Retry"
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Retry",
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.WifiOff,
+                        contentDescription = "No Internet",
+                        tint = Error,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "No Internet Connection",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = "Please check your internet connection and try again.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Retry Button - Flat Design with Modern Icon
+                Button(
+                    onClick = onRetry,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(0.dp), // Flat design
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.RefreshCw,
+                        contentDescription = "Retry",
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Try Again",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }

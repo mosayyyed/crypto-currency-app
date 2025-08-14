@@ -10,6 +10,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -58,33 +60,42 @@ private val LightColorScheme = lightColorScheme(
     onBackground = TextPrimary,
     surface = SurfaceLight,
     onSurface = TextPrimary,
-    surfaceVariant = androidx.compose.ui.graphics.Color(0xFFF8FAFC),
-    onSurfaceVariant = TextSecondary,
+    surfaceVariant = CardBackground,
+    onSurfaceVariant = TextPrimary,
     error = Error,
     onError = TextOnPrimary,
     outline = BorderLight,
     inverseOnSurface = TextOnDark,
     inverseSurface = SurfaceDark,
-    inversePrimary = androidx.compose.ui.graphics.Color(0xFFA5B4FC),
+    inversePrimary = Primary,
     surfaceTint = Primary,
-    outlineVariant = androidx.compose.ui.graphics.Color(0xFFE2E8F0),
-    scrim = androidx.compose.ui.graphics.Color(0x40000000)
+    outlineVariant = BorderLight,
+    scrim = BackgroundLight
 )
 
 @Composable
 fun CryptoCurrencyAppTheme(
+    themeManager: ThemeManager? = null,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    // Use ThemeManager if provided, otherwise fall back to system theme
+    val isDarkTheme = if (themeManager != null) {
+        val isDark by themeManager.isDarkTheme.collectAsState()
+        isDark
+    } else {
+        darkTheme
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+        isDarkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
     val view = LocalView.current
@@ -92,7 +103,7 @@ fun CryptoCurrencyAppTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
         }
     }
 

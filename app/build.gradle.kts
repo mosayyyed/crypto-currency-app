@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.cryptocurrencyapp"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -64,15 +64,20 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     ksp(libs.hilt.android.compiler.v2511)
     implementation (libs.androidx.hilt.navigation.compose.v100)
-    implementation ("androidx.navigation:navigation-compose:2.8.6")
 
-    // HTML to Text Processing - أبسط وأكثر استقراراً
-    implementation ("org.jsoup:jsoup:1.17.2")
+    // Navigation - Updated to latest version
+    implementation ("androidx.navigation:navigation-compose:2.9.3")
+
+    // HTML to Text Processing - Updated to latest version
+    implementation ("org.jsoup:jsoup:1.21.1")
 
     implementation (libs.google.accompanist.flowlayout)
     //coroutines
     implementation(libs.kotlinx.coroutines.android)
 
+    // Modern Icon Libraries - Only stable ones
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation("br.com.devsrsouza.compose.icons:feather:1.1.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
