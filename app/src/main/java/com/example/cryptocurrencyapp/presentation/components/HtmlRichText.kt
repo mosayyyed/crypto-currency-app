@@ -51,9 +51,9 @@ fun HtmlText(
         .replace("&copy;", "©")
         .replace("&reg;", "®")
         .replace("&trade;", "™")
-        .replace(Regex("<[^>]*>"), "") // إزالة أي علامات HTML متبقية
-        .replace(Regex("\\s+"), " ") // إزالة المسافات المتعددة
-        .replace("\n ", "\n") // تنظيف السطور
+        .replace(Regex("<[^>]*>"), "")
+        .replace(Regex("\\s+"), " ")
+        .replace("\n ", "\n")
         .trim()
 
     Text(
