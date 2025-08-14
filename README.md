@@ -247,10 +247,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact Information
 
-- **LinkedIn**: [Your LinkedIn Profile]
-- **GitHub**: [Your GitHub Profile]
-- **Email**: [your.email@example.com]
-- **Portfolio**: [Your Portfolio Website]
+- **LinkedIn**: https://www.linkedin.com/in/mosayyyed/
+- **GitHub**: https://github.com/mosayyyed
+- **Email**: mosayyyed@gmail.com
+- **Portfolio**: https://www.mosayyyed.me
 
 ## 🙏 Acknowledgments
 
